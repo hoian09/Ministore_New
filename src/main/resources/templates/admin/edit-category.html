@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base::layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<section>
+    <div class="container-fluid p-5 mt-5">
+        <div class="row">
+            <div class="col-md-3 offset-md-5">
+                <div class="card card-sh">
+                    <div class="card-header text-center fs-4">Edit Category</div>
+                    <div class="card-body">
+                        <form action="/admin/saveCategory" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label>ID Category</label>
+                                <input type="text" name="id" class="form-control" th:value="${category.id}" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label>Enter Category</label>
+                                <input type="text" name="name" class="form-control" th:value="${category.name}">
+                            </div>
+                            <div class="mb-3">
+                                <label>Upload File</label>
+                                <input type="file" name="image" class="form-control" required>
+                            </div>
+                            <img th:src="@{/admin/getCategoryFile/{id}(id=${category.id})}" width="100px" height="100px">
+                            <button class="btn btn-primary col-md-12 mt-2">Upload</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p th:text="${msg}"></p>
+</section>
+</body>
+</html>

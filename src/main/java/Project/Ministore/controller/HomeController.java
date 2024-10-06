@@ -1,6 +1,4 @@
 package Project.Ministore.controller;
-
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -21,5 +19,12 @@ public class HomeController {
     public  String register(){
         return  "register";
     }
-
+    @GetMapping("/products")
+    public  String product(){
+        return  "product";
+    }
+    @GetMapping("/view_product")
+    public  String viewproduct(){
+        return  "view_product";
+    }
 }
