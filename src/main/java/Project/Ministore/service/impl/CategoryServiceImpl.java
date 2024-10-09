@@ -1,14 +1,15 @@
-package Project.Ministore.service;
+package Project.Ministore.service.impl;
 
 import Project.Ministore.Entity.CategoryEntity;
 import Project.Ministore.repository.CategoryRepository;
+import Project.Ministore.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class CategoryServiceImpl implements CategoryService{
+public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 

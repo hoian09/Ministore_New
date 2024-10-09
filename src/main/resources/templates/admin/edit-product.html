@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base::layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<section>
+    <div class="container p-5 mt-5">
+        <a href="/admin/products" class="back-icon">Quay lại</a><br><br>
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card card-sh">
+                    <div class="card-header text-center fs-4">Chỉnh Sửa Sản Phẩm</div>
+                    <div class="card-body">
+                        <form action="/admin/saveProduct" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label>Số Thứ Tự</label>
+                                <input type="text" name="id" class="form-control" th:value="${product.id}" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label>Nhập Tên Sản Phẩm</label>
+                                <input type="text" name="product_name" class="form-control" th:value="${product.product_name}">
+                            </div>
+                            <div class="mb-3">
+                                <label>Nhập Mô Tả</label>
+                                <textarea rows="3" cols="" class="form-control" name="description" th:value="${product.description}"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label>Danh Mục</label>
+                                <select style="background-color: #f8f8f8" class="form-control">
+                                    <option th:each="c:${categories}">[[${product.c.name}]]</option>
+                                </select>
+                            </div>
+                            <div class="row">
+                            <div class="mb-3 col">
+                                <label>Nhập Xuất Xứ</label>
+                                <input type="text" name="origin" class="form-control" th:value="${product.origin}">
+                            </div>
+                            <div class="mb-3 col">
+                                <label>Nhập Giá</label>
+                                <input type="number" name="product_price" class="form-control" th:value="${product.product_price}">
+                            </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-3 col">
+                                    <label>Giảm Giá</label>
+                                    <input type="number" name="discount" class="form-control" th:value="${product.discount}">
+                                </div>
+                                <div class="mb-3 col">
+                                    <label>Giá Chiết Khấu</label>
+                                    <input type="number"  class="form-control" th:value="${product.discount_price}" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-3 col">
+                                    <label>Nhập Hàng Tồn Kho</label>
+                                    <input type="number" name="stock_quantity" class="form-control" th:value="${product.stock_quantity}">
+                                </div>
+                                <div class="mb-3 col">
+                                    <label>Tải Lên Hình Ảnh</label>
+                                    <input type="file" name="image" class="form-control" required>
+                                </div>
+                            </div>
+                            <img width="100px" height="100px" th:src="@{/admin/getProductFile/{id}(id=${product.id})}"/>
+                            <button class="btn btn-primary col-md-12">Cập Nhật</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p th:text="${msg}"></p>
+</section>
+</body>
+</html>

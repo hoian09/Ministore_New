@@ -26,10 +26,7 @@
                     <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
                         Tất Cả
                     </a>
-                    <a href="#" class="list-group-item list-group-item-action">Đồng Hồ Nam</a>
-                    <a href="#" class="list-group-item list-group-item-action">Đồng Hồ Nữ </a>
-                    <a href="#" class="list-group-item list-group-item-action">Phụ Kiện</a>
-                    <a href="#" class="list-group-item list-group-item-action">Ví Da</a>
+                    <a href="#" class="list-group-item list-group-item-action" th:each="c:${category}" >[[${c.name}]]</a>
                 </div>
             </div>
             <div class="col-md-10">
@@ -37,133 +34,27 @@
                 <div class="card-body">
                     <p class="fs-3 text-center">Sản phẩm</p>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-3 mt-4" th:each="p:${product}">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="discount-badge">-30%</div>
-                                    <img src="/img/dongho/product1.jpg" width="100%" height="200px">
-                                    <p class="fs-5 text-center">Seiko Tsuyosa</p>
+                                    <div class="discount-badge">[[${p.discount}]]%</div>
+                                    <img th:src="@{/admin/getProductFile/{id}(id=${p.id})}" width="100%" height="200px">
+                                    <p class="fs-5 text-center">[[${p.product_name}]]</p>
                                     <div class="row text-center">
-                                    <p class="fs-6 fw-bold">
-                                        1200$
+                                    <p class="fs-6 fw-bold" >
+                                        [[${p.product_price}]] ₫
                                     </p>
-                                        <a class="btn btn-primary col-md-6 offset-md-3">Xem Chi Tiết</a>
-                                    </div>
-                                </div>
-
-                        </div>
-                    </div>
-                        <div class="col-md-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="discount-badge">-30%</div>
-                                    <img src="/img/dongho/product1.jpg" width="100%" height="200px">
-                                    <p class="fs-5 text-center">Seiko Tsuyosa</p>
-                                    <div class="row text-center">
-                                        <p class="fs-6 fw-bold">
-                                            1200$
-                                        </p>
                                         <a class="btn btn-primary col-md-6 offset-md-3" href="/view_product">Xem Chi Tiết</a>
                                     </div>
                                 </div>
-
-                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <img src="/img/dongho/product1.jpg" width="100%" height="200px">
-                                    <p class="fs-5 text-center">Seiko Tsuyosa</p>
-                                    <div class="row text-center">
-                                        <p class="fs-6 fw-bold">
-                                            1200$
-                                        </p>
-                                        <a class="btn btn-primary col-md-6 offset-md-3">Xem Chi Tiết</a>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col-md-3 ">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="discount-badge">-30%</div>
-                                    <img src="/img/dongho/product1.jpg" width="100%" height="200px">
-                                    <p class="fs-5 text-center">Seiko Tsuyosa</p>
-                                    <div class="row text-center">
-                                        <p class="fs-6 fw-bold">
-                                            1200$
-                                        </p>
-                                        <a class="btn btn-primary col-md-6 offset-md-3">Xem Chi Tiết</a>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col-md-3 mt-5">
-                            <div class="card">
-                                <div class="card-body">
-                                    <img src="/img/dongho/product1.jpg" width="100%" height="200px">
-                                    <p class="fs-5 text-center">Seiko Tsuyosa</p>
-                                    <div class="row text-center">
-                                        <p class="fs-6 fw-bold">
-                                            1200$
-                                        </p>
-                                        <a class="btn btn-primary col-md-6 offset-md-3">Xem Chi Tiết</a>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col-md-3 mt-5">
-                            <div class="card">
-                                <div class="card-body">
-                                    <img src="/img/dongho/product1.jpg" width="100%" height="200px">
-                                    <p class="fs-5 text-center">Seiko Tsuyosa</p>
-                                    <div class="row text-center">
-                                        <p class="fs-6 fw-bold">
-                                            1200$
-                                        </p>
-                                        <a class="btn btn-primary col-md-6 offset-md-3">Xem Chi Tiết</a>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col-md-3 mt-5">
-                            <div class="card">
-                                <div class="card-body">
-                                    <img src="/img/dongho/product1.jpg" width="100%" height="200px">
-                                    <p class="fs-5 text-center">Seiko Tsuyosa</p>
-                                    <div class="row text-center">
-                                        <p class="fs-6 fw-bold">
-                                            1200$
-                                        </p>
-                                        <a class="btn btn-primary col-md-6 offset-md-3">Xem Chi Tiết</a>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col-md-3 mt-5">
-                            <div class="card">
-                                <div class="card-body">
-                                    <img src="/img/dongho/product1.jpg" width="100%" height="200px">
-                                    <p class="fs-5 text-center">Seiko Tsuyosa</p>
-                                    <div class="row text-center">
-                                        <p class="fs-6 fw-bold">
-                                            1200$
-                                        </p>
-                                        <a class="btn btn-primary col-md-6 offset-md-3">Xem Chi Tiết</a>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
+                    </div>
                 </div>
             </div>
             </div>
         </div>
+        </div>
+    </div>
 </section>
-</body>
+    </body>
 </html>

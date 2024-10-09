@@ -11,23 +11,23 @@
         <div class="row">
             <div class="col-md-3 offset-md-5">
                 <div class="card card-sh">
-                    <div class="card-header text-center fs-4">Edit Category</div>
+                    <div class="card-header text-center fs-4">Chỉnh Sửa Danh Mục</div>
                     <div class="card-body">
                         <form action="/admin/saveCategory" method="post" enctype="multipart/form-data">
                             <div class="mb-3">
-                                <label>ID Category</label>
+                                <label>Số Thứ Tự</label>
                                 <input type="text" name="id" class="form-control" th:value="${category.id}" readonly>
                             </div>
                             <div class="mb-3">
-                                <label>Enter Category</label>
+                                <label>Nhập Tên Danh Mục</label>
                                 <input type="text" name="name" class="form-control" th:value="${category.name}">
                             </div>
                             <div class="mb-3">
-                                <label>Upload File</label>
+                                <label>Tải Lên Hình Ảnh</label>
                                 <input type="file" name="image" class="form-control" required>
                             </div>
                             <img th:src="@{/admin/getCategoryFile/{id}(id=${category.id})}" width="100px" height="100px">
-                            <button class="btn btn-primary col-md-12 mt-2">Upload</button>
+                            <button class="btn btn-primary col-md-12 mt-2">Cập Nhật</button>
                         </form>
                     </div>
                 </div>

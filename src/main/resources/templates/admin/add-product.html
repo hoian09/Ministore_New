@@ -8,47 +8,48 @@
 <body>
 <section>
     <div class="container p-5 mt-5">
+        <a href="/admin/" class="back-icon">Quay lại</a><br><br>
     <div class="row">
         <div class="col-md-6 offset-md-3">
         <div class="card card-sh">
-        <div class="card-header text-center fs-4">Add Product</div>
+        <div class="card-header text-center fs-4">Thêm Sản Phẩm</div>
             <div class="card-body">
                 <form action="/admin/insertImagee" method="post" enctype="multipart/form-data">
 
                     <div class="mb-3">
-                        <label>Enter Title</label>
+                        <label>Nhập Tên Sản Phẩm</label>
                         <input type="text" name="product_name" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label>Enter Description</label>
+                        <label>Nhập Mô Tả</label>
                         <textarea rows="3" cols="" class="form-control" name="description"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label>Category</label>
-                        <select class="form-control">
-                            <option>--select--</option>
-                            <option th:each="c:${categories}">[[${c.name}]]</option>
+                        <label>Danh Mục</label>
+                        <select class="form-control" name="category_id">
+                            <option>--Lựa Chọn--</option>
+                            <option th:each="c:${categories}" th:value="${c.id}">[[${c.name}]]</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label>Enter Origin</label>
+                        <label>Nhập Xuất Xứ</label>
                         <input type="text" name="origin" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label>Enter Price</label>
+                        <label>Nhập Giá</label>
                         <input type="number" name="product_price" class="form-control">
                     </div>
                     <div class="row">
                     <div class="mb-3 col">
-                        <label>Enter Stock</label>
+                        <label>Nhập Kho</label>
                         <input type="number" name="stock_quantity" class="form-control">
                     </div>
                     <div class="mb-3 col">
-                        <label>Upload Image</label>
+                        <label>Tải Lên Hình Ảnh</label>
                         <input type="file" name="image" class="form-control">
                     </div>
                     </div>
-                    <button class="btn btn-primary col-md-12">Submit</button>
+                    <button class="btn btn-primary col-md-12">Xác Nhận</button>
                 </form>
             </div>
         </div>

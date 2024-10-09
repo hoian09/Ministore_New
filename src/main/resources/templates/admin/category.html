@@ -8,40 +8,41 @@
 <body>
 <section>
     <div class="container-fluid p-5 mt-5">
+        <a href="/admin/" class="back-icon">Quay lại</a><br><br>
         <div class="row">
             <div class="col-md-3">
                 <div class="card card-sh">
-                    <div class="card-header text-center fs-4">Add Category</div>
+                    <div class="card-header text-center fs-4">Thêm Danh Mục</div>
                     <div class="card-body">
                         <form th:action="@{/admin/insertImage}" method="post" enctype="multipart/form-data">
                             <div class="mb-3">
-                                <label>Enter Category</label>
+                                <label>Nhập Tên Danh Mục</label>
                                 <input type="text" name="name" class="form-control">
                             </div>
                             <div class="mb-3">
-                                <label>Upload File</label>
+                                <label>Tải Lên Hình Ảnh</label>
                                 <input type="file" name="image" class="form-control">
                             </div>
-                            <button class="btn btn-primary col-md-12 mt-2">Save</button>
+                            <button class="btn btn-primary col-md-12 mt-2">Xác Nhận</button>
                         </form>
                     </div>
                 </div>
             </div>
             <div class="col-md-8">
                 <div class="card card-sh">
-                    <div class="card-header text-center fs-4">Category Details</div>
+                    <div class="card-header text-center fs-4">Chi Tiết Danh Mục</div>
                     <div class="card-body">
                         <table class="table">
                             <thead>
                             <tr>
-                                <th scope="col">Id</th>
-                                <th scope="col">Category</th>
-                                <th scope="col">Image</th>
-                                <th scope="col">Action</th>
+                                <th scope="col">Số Thứ Tự</th>
+                                <th scope="col">Tên Danh Mục</th>
+                                <th scope="col">Hình Ảnh</th>
+                                <th scope="col"></th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="category : ${listStu}">
+                            <tr th:each="category : ${listCate}">
                                 <td th:text="${category.id}"></td>
                                 <td th:text="${category.name}"></td>
                                 <td>
@@ -49,14 +50,16 @@
                                 </td>
                                 <td>
                                     <a th:href="@{'/admin/loadEditCategory/' +${category.id}}" class="btn btn-primary btn-sm" style="font-family: Arial"><i class="fa-solid fa-pen-to-square fa-1x" >CHỈNH SỬA</i></a>
-                                    <a th:href="@{'/admin/deleteCategory/' +${category.id}}" class="btn btn-danger btn-sm" style="font-family: Arial"><i class="fa-solid fa-trash fa-1x" >XOÁ</i></a>
+                                    <a th:href="@{'/admin/deleteCategory/' +${category.id}}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn xoá không?')" style="font-family: Arial"><i class="fa-solid fa-trash fa-1x" >XOÁ</i></a>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
+
                 </div>
             </div>
+
         </div>
     </div>
     <p th:text="${msg}"></p>

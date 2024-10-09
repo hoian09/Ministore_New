@@ -22,6 +22,10 @@ public class ProductEntity {
     private byte[] image;
     @Column(name = "origin")
     private String origin;
+    @Column(name = "discount")
+    private int discount;
+    @Column(name = "discount_price")
+    private Double discount_price;
     @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL)
     private List<ReviewEntity> reviewEntities;
     @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL)
@@ -33,7 +37,7 @@ public class ProductEntity {
     @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL)
     private List<ImageEntity> imageEntities;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id",nullable = true)
     private CategoryEntity categoryEntity;
 
     public int getId() {
@@ -138,5 +142,21 @@ public class ProductEntity {
 
     public void setCategoryEntity(CategoryEntity categoryEntity) {
         this.categoryEntity = categoryEntity;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
+    }
+
+    public Double getDiscount_price() {
+        return discount_price;
+    }
+
+    public void setDiscount_price(Double discount_price) {
+        this.discount_price = discount_price;
     }
 }
