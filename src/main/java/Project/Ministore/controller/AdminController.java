@@ -1,10 +1,12 @@
 package Project.Ministore.controller;
+import Project.Ministore.Entity.AccountEntity;
 import Project.Ministore.Entity.CategoryEntity;
+import Project.Ministore.Entity.OrdersEntity;
 import Project.Ministore.Entity.ProductEntity;
+import Project.Ministore.repository.AccountRepository;
 import Project.Ministore.repository.CategoryRepository;
 import Project.Ministore.repository.ProductRepository;
-import Project.Ministore.service.CategoryService;
-import Project.Ministore.service.ProductService;
+import Project.Ministore.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,9 +38,30 @@ private CategoryRepository categoryRepository;
 private ProductRepository productRepository;
 @Autowired
 private ProductService productService;
+@Autowired
+private AccountService accountService;
+@Autowired
+private AccountRepository accountRepository;
+@Autowired
+private CartService cartService;
+@Autowired
+private OrdersService ordersService;
     @GetMapping("/")
     public String index(){
         return "admin/index";
+    }
+
+    @ModelAttribute
+    public void getUserDetails(Principal principal, Model model){
+        if (principal !=null ){
+            String email = principal.getName();
+            AccountEntity user = accountService.getUserByEmail(email);
+            model.addAttribute("user", user);
+            int countCart = cartService.getCountCart(user.getId());
+            model.addAttribute("countCart", countCart);
+        }
+        List<CategoryEntity> allActiveCategory = categoryService.findByActiveTrue();
+        model.addAttribute("category", allActiveCategory);
     }
 
     @GetMapping("/loadAddProduct")
@@ -46,30 +71,32 @@ private ProductService productService;
         return "admin/add-product";
     }
 
-    @GetMapping("/category")
-    public String category(){
-        return "admin/category";
-    }
-
 @PostMapping(value = "/insertImage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE, "text/plain;charset=UTF-8"})
 public ModelAndView insertImage(@RequestParam("name") String name,
+                         @RequestParam("is_active") Boolean active,
                          @RequestPart("image") MultipartFile image) {
     try {
         CategoryEntity category = new CategoryEntity();
         category.setName(name);
+        category.setActive(active);
         category.setImage(image.getBytes());
         categoryRepository.save(category);
-        return new ModelAndView("redirect:/admin/fetch");
+        return new ModelAndView("redirect:/admin/category");
     } catch (Exception e) {
         return new ModelAndView("admin/category", "msg", "Error: " + e.getMessage());
     }
 }
-
-    @GetMapping(value = "/fetch")
-    public ModelAndView listCategory(ModelAndView model) throws IOException {
+    @GetMapping(value = "/category")
+    public ModelAndView listCategory(ModelAndView model, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) throws IOException {
         List<CategoryEntity> listCate = (List<CategoryEntity>) categoryRepository.findAll();
         model.addObject("listCate", listCate);
         model.setViewName("admin/category");
+        model.addObject("category", categoryService.getAllCategory());
+        Page<CategoryEntity> list1 = categoryService.getAllCategory(pageNo);
+        model.addObject("totalPage", list1.getTotalPages());// Trang hiện tại
+        model.addObject("currentPage", pageNo);// Tổng số trang
+        model.addObject("listCate", list1.getContent());// Lấy danh sách sản phẩm hiện tại
+        model.addObject("totalCategory", list1.getTotalElements());
         return model;
     }
 
@@ -89,7 +116,7 @@ public ModelAndView insertImage(@RequestParam("name") String name,
     @GetMapping("/deleteCategory/{id}")
     public String deleteCategory(@PathVariable(name = "id") int id){
         categoryRepository.deleteById(id);
-        return "redirect:/admin/fetch";
+        return "redirect:/admin/category";
     }
 
     @GetMapping("/loadEditCategory/{id}")
@@ -104,46 +131,44 @@ public ModelAndView insertImage(@RequestParam("name") String name,
     public String saveCategory(@RequestParam("id") Integer id,
                                @RequestParam("name") String name,
                                @RequestParam("image") MultipartFile image,
+                               @RequestParam("is_active") Boolean active,
                                Model model) {
         try {
             CategoryEntity category = categoryRepository.findById(id).orElseThrow(() -> new Exception("Category not found"));
             category.setName(name);
+            category.setActive(active);
 
             // Kiểm tra xem có tệp hình ảnh mới không
             if (!image.isEmpty()) {
                 category.setImage(image.getBytes());
             }
             categoryRepository.save(category); // Lưu category đã chỉnh sửa
-            return "redirect:/admin/fetch"; // Chuyển hướng về danh sách
+            return "redirect:/admin/category"; // Chuyển hướng về danh sách
         } catch (Exception e) {
             model.addAttribute("msg", e.getMessage()); // Gửi thông báo lỗi
-            return "admin/edit-category"; // Quay lại trang chỉnh sửa nếu có lỗi
+            return "admin/category"; // Quay lại trang chỉnh sửa nếu có lỗi
         }
     }
-
-//    @GetMapping("/products")
-//    public String loadViewProduct(Model model){
-//        model.addAttribute("products", productService.getAllProduct());
-//        return "admin/products";
-//    }
 
     @PostMapping(value = "/insertImagee", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = {MediaType.APPLICATION_JSON_VALUE, "text/plain;charset=UTF-8"})
     public ModelAndView insertImage(
             @RequestParam("product_name") String product_name,
             @RequestParam("description") String description,
-            @RequestParam("product_price") Double product_price,
+            @RequestParam("price") Long price,
             @RequestParam("stock_quantity") Integer stock_quantity,
             @RequestParam("image") MultipartFile image,
             @RequestParam("origin") String origin,
+            @RequestParam("is_active") Boolean active,
             @RequestParam(value = "category_id", required = true) Integer categoryId){
         try {
             ProductEntity product = new ProductEntity();
             product.setProduct_name(product_name);
             product.setDescription(description);
-            product.setProduct_price(product_price);
+            product.setPrice(price);
             product.setStock_quantity(stock_quantity);
             product.setImage(image.getBytes());
             product.setOrigin(origin);
+            product.setActive(active);
             CategoryEntity category = categoryRepository.findById(categoryId)
                     .orElseThrow(() -> new RuntimeException("Category not found"));
             product.setCategoryEntity(category);
@@ -193,7 +218,7 @@ public ModelAndView insertImage(@RequestParam("name") String name,
     public String saveProduct (@RequestParam("id") Integer id,
                             @RequestParam("product_name") String product_name,
                              @RequestParam("description") String description,
-                             @RequestParam("product_price") Double product_price,
+                             @RequestParam("price") Long price,
                              @RequestParam("stock_quantity") Integer stock_quantity,
                              @RequestParam("image") MultipartFile image,
                              @RequestParam("origin") String origin,
@@ -203,22 +228,26 @@ public ModelAndView insertImage(@RequestParam("name") String name,
         ProductEntity product = productRepository.findById(id).orElseThrow(() -> new Exception("Product not found"));
         product.setProduct_name(product_name);
         product.setDescription(description);
-        product.setProduct_price(product_price);
+        product.setPrice(price);
         product.setStock_quantity(stock_quantity);
         product.setImage(image.getBytes());
         product.setOrigin(origin);
-        product.setDiscount_price(product.getProduct_price());
-//        product.setDiscount(discount);
-//        product.setDiscount_price(product.getProduct_price());
+        product.setDiscount_price(product.getPrice());
         // Kiểm tra xem có tệp hình ảnh mới không
         if (!image.isEmpty()) {
             product.setImage(image.getBytes());
         }
+
         //S = 100-5/100 = 95
-        if(discount != null && discount >= 0){
-            Double discountAmount = product.getProduct_price() * (discount / 100.0);
-            Double discoutPrice = product.getProduct_price() - discountAmount;
-            product.setProduct_price(discoutPrice);
+        if (discount != null && discount >= 0) {
+            // Lấy giá của sản phẩm
+            Long originalPrice = product.getPrice(); // Giả sử giá là Long
+
+            // Tính toán chiết khấu
+            Long discountAmount = Math.round(originalPrice * (discount / 100.0)); // Tính chiết khấu và làm tròn
+            Long discountedPrice = originalPrice - discountAmount; // Tính giá sau chiết khấu
+
+            product.setPrice(discountedPrice);
         }
         product.setDiscount(discount);
         productRepository.save(product);
@@ -250,5 +279,39 @@ public ModelAndView insertImage(@RequestParam("name") String name,
     model.addAttribute("totalProducts", list.getTotalElements());// Tổng số sản phẩm
     return "admin/products";
 }
+@GetMapping("/users")
+    public String getAllUsers(Model model){
+    List<AccountEntity> users = accountService.getUsers("ROLE_USER");
+    model.addAttribute("users", users);
+    return "admin/users";
 
+}
+    @GetMapping(value = "/getAccountFile/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody
+    public ResponseEntity<byte[]> getAccountFile(@PathVariable("id") int id) {
+        AccountEntity user = accountRepository.findById(id).orElse(null);
+        if (user != null && user.getProfileImage() != null) {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(user.getProfileImage());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/updateSts")
+    public String getAllUsers(@RequestParam Boolean enable, @RequestParam Integer id, HttpSession session){
+    Boolean f = accountService.updateAccountStatus(id, enable);
+    if (f){
+        session.setAttribute("succMsg","Trạng Thái Tài khoản được cập nhật");
+    }else {
+        session.setAttribute("errorMsg", "Tài Khoản Chưa Cập Nhật");
+    }
+            return "redirect:/admin/users";
+    }
+    @GetMapping("/orders")
+    public String getAllOrders(Model model){
+        List<OrdersEntity> allOrders = ordersService.getAllOrders();
+        model.addAttribute("orders",allOrders);
+        return "admin/orders";
+    }
 }

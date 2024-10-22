@@ -50,3 +50,25 @@ th, td {
     .pagination .page-link {
         padding: 5px 10px;
     }
+    .filter-title {
+                font-size: 1.25rem;
+                font-weight: bold;
+                margin-bottom: 1rem;
+            }
+    .category-card {
+            width: 120px;
+            text-align: center;
+            padding: 10px;
+            transition: all 0.3s ease;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background-color: white;
+        }
+        .category-link {
+                    text-decoration: none; /* Bỏ dấu gạch chân */
+                    color: #007bff; /* Đổi màu chữ (xanh) */
+                }
+                .category-link:hover {
+                    color: #0056b3; /* Màu khi hover (xanh đậm hơn) */
+                }
+

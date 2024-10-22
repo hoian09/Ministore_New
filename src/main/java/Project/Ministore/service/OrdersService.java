@@ -1,5 +1,14 @@
 package Project.Ministore.service;
 
-public class OrdersService {
+import Project.Ministore.Dto.OrdersAddressEntityDto;
+import Project.Ministore.Entity.OrdersAddressEntity;
+import Project.Ministore.Entity.OrdersEntity;
 
+import java.util.List;
+
+public interface OrdersService {
+public void saveOrder(int accountId, OrdersAddressEntityDto ordersAddressEntityDto);
+public List<OrdersEntity> getOrdersByUser(int accountId);
+public Boolean updateOrderStatus(int id, String status);
+public List<OrdersEntity> getAllOrders();
 }

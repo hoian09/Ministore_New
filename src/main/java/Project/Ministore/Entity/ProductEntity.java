@@ -1,8 +1,12 @@
 package Project.Ministore.Entity;
 
-import javax.persistence.*;
-import java.util.List;
 
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.List;
+import java.util.Locale;
 @Entity
 @Table(name = "product")
 public class ProductEntity {
@@ -13,11 +17,11 @@ public class ProductEntity {
     private String product_name;
     @Column(name = "description")
     private String description;
-    @Column(name = "product_price")
-    private Double product_price;
+    @Column(name = "price" )
+    private Long price;
     @Column(name = "stock_quantity")
     private int stock_quantity;
-    @Column(name = "image")
+    @Column(name = "image",nullable = false)
     @Lob
     private byte[] image;
     @Column(name = "origin")
@@ -25,21 +29,22 @@ public class ProductEntity {
     @Column(name = "discount")
     private int discount;
     @Column(name = "discount_price")
-    private Double discount_price;
-    @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL)
-    private List<ReviewEntity> reviewEntities;
-    @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL)
-    private List<PromotionEntity> promotionEntities;
-    @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL)
-    private List<ProductDetailEntity> productDetailEntities;
-    @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL)
-    private List<OrdersDetailEntity> ordersDetailEntities;
-    @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL)
-    private List<ImageEntity> imageEntities;
+    private Long discount_price;
+    @Column(name = "is_active")
+    private Boolean active;
+    @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartEntity> cartEntities;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id",nullable = true)
     private CategoryEntity categoryEntity;
-
+    public String getFormattedPrice() {
+        DecimalFormat df = new DecimalFormat("#,###");
+        return df.format(price) + " ₫";
+    }
+    public String getFormattedDiscountPrice() {
+        DecimalFormat df = new DecimalFormat("#,###");
+        return df.format(discount_price) + " ₫";
+    }
     public int getId() {
         return id;
     }
@@ -64,12 +69,20 @@ public class ProductEntity {
         this.description = description;
     }
 
-    public Double getProduct_price() {
-        return product_price;
+    public Long getPrice() {
+        return price;
     }
 
-    public void setProduct_price(Double product_price) {
-        this.product_price = product_price;
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
+    public Long getDiscount_price() {
+        return discount_price;
+    }
+
+    public void setDiscount_price(Long discount_price) {
+        this.discount_price = discount_price;
     }
 
     public int getStock_quantity() {
@@ -96,46 +109,6 @@ public class ProductEntity {
         this.origin = origin;
     }
 
-    public List<ReviewEntity> getReviewEntities() {
-        return reviewEntities;
-    }
-
-    public void setReviewEntities(List<ReviewEntity> reviewEntities) {
-        this.reviewEntities = reviewEntities;
-    }
-
-    public List<PromotionEntity> getPromotionEntities() {
-        return promotionEntities;
-    }
-
-    public void setPromotionEntities(List<PromotionEntity> promotionEntities) {
-        this.promotionEntities = promotionEntities;
-    }
-
-    public List<ProductDetailEntity> getProductDetailEntities() {
-        return productDetailEntities;
-    }
-
-    public void setProductDetailEntities(List<ProductDetailEntity> productDetailEntities) {
-        this.productDetailEntities = productDetailEntities;
-    }
-
-    public List<OrdersDetailEntity> getOrdersDetailEntities() {
-        return ordersDetailEntities;
-    }
-
-    public void setOrdersDetailEntities(List<OrdersDetailEntity> ordersDetailEntities) {
-        this.ordersDetailEntities = ordersDetailEntities;
-    }
-
-    public List<ImageEntity> getImageEntities() {
-        return imageEntities;
-    }
-
-    public void setImageEntities(List<ImageEntity> imageEntities) {
-        this.imageEntities = imageEntities;
-    }
-
     public CategoryEntity getCategoryEntity() {
         return categoryEntity;
     }
@@ -152,11 +125,12 @@ public class ProductEntity {
         this.discount = discount;
     }
 
-    public Double getDiscount_price() {
-        return discount_price;
+    public Boolean getActive() {
+        return active;
     }
 
-    public void setDiscount_price(Double discount_price) {
-        this.discount_price = discount_price;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
+
 }

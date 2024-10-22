@@ -1,4 +1,9 @@
 package Project.Ministore.Entity;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -8,13 +13,14 @@ public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "image")
+    @Column(name = "is_active")
+    private boolean active;
+    @Column(name = "image", nullable = false)
     @Lob
     private byte[] image;
-
-    @OneToMany(mappedBy = "categoryEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "categoryEntity",orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ProductEntity> productEntities;
 
     public int getId() {
@@ -49,12 +55,11 @@ public class CategoryEntity {
         this.image = image;
     }
 
-//    public Boolean getIs_active() {
-//        return is_active;
-//    }
-//
-//    public void setIs_active(Boolean is_active) {
-//        this.is_active = is_active;
-//    }
+    public boolean isActive() {
+        return active;
+    }
 
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }

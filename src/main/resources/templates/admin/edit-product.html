@@ -27,11 +27,30 @@
                                 <label>Nhập Mô Tả</label>
                                 <textarea rows="3" cols="" class="form-control" name="description" th:value="${product.description}"></textarea>
                             </div>
-                            <div class="mb-3">
+                            <div class="row">
+                            <div class="mb-3 col">
                                 <label>Danh Mục</label>
                                 <select style="background-color: #f8f8f8" class="form-control">
                                     <option th:each="c:${categories}">[[${product.c.name}]]</option>
                                 </select>
+                            </div>
+                                <div class="mb-3 col">
+                                    <label>Trạng Thái</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="true" name="is_active" id="flexRadioDefault1"
+                                               th:checked="${product.active== True}">
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            Hoạt Động
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="false" name="is_active" id="flexRadioDefault2"
+                                               th:checked="${product.active== False}">
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                            Không Hoạt Động
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                             <div class="mb-3 col">
@@ -40,17 +59,17 @@
                             </div>
                             <div class="mb-3 col">
                                 <label>Nhập Giá</label>
-                                <input type="number" name="product_price" class="form-control" th:value="${product.product_price}">
+                                <input type="text" name="price" class="form-control" th:value="${product.price}">
                             </div>
                             </div>
                             <div class="row">
                                 <div class="mb-3 col">
                                     <label>Giảm Giá</label>
-                                    <input type="number" name="discount" class="form-control" th:value="${product.discount}">
+                                    <input type="number" name="discount" class="form-control" th:value="${product.discount}" >
                                 </div>
                                 <div class="mb-3 col">
-                                    <label>Giá Chiết Khấu</label>
-                                    <input type="number"  class="form-control" th:value="${product.discount_price}" readonly>
+                                    <label>Giá Ban Đầu</label>
+                                    <input type="text"  class="form-control" th:value="${product.discount_price}" readonly>
                                 </div>
                             </div>
                             <div class="row">

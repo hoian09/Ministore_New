@@ -1,56 +1,61 @@
 package Project.Ministore.Entity;
-
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 @Entity
 @Table(name = "account")
 public class AccountEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "firstname")
-    private String firstname;
-    @Column(name = "lastname")
-    private String lastname;
-    @Column(name = "username")
-    private String username;
-    @Column(name = "email", unique = true)
+    @Column(name = "name", nullable = false)
+    private String name;
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
-    @Column(name = "password")
+    @Column(name = "address")
+    private String address;
+    @Column(name = "city")
+    private String city;
+    @Column(name = "province")
+    private String province;
+    @Column(name = "pincode")
+    private String pincode;
+    @Column(name = "password", nullable = false)
     private String password;
     @Column(name = "phone")
-    private int phone;
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-            name ="account_role",
-            joinColumns = @JoinColumn(name = "account_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<RoleEntity> roleEntities = new HashSet<>();
+    private Long phone;
+    @Column(name = "profile_image",nullable = false)
+    @Lob
+    private byte[] profileImage;
+    @Column(name = "role")
+    private String role;
+    @Column(name = "is_enable")
+    private Boolean enable;
+    @Column(name = "account_nonlocked")
+    private Boolean account_nonlocked;
+    @Column(name = "failed_attempt")
+    private int failed_attempt;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "lock_time")
+    private Date lock_time;
+    @Column(name = "reset_token")
+    private String resetToken;
     @OneToMany(mappedBy = "accountEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReviewEntity> reviewEntities;
-    @OneToMany(mappedBy = "accountEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ShippingAddressEntity> shippingAddressEntities;
-    @OneToMany(mappedBy = "accountEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ShoppingCartEntity> shoppingCartEntities;
-    @OneToMany(mappedBy = "accountEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PromotionEntity> promotionEntities;
+    private List<CartEntity> cartEntities;
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
 
-    public int getPhone() {
+    public Long getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(Long phone) {
         this.phone = phone;
     }
 
@@ -62,6 +67,54 @@ public class AccountEntity {
         this.password = password;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(String pincode) {
+        this.pincode = pincode;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public byte[] getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(byte[] profileImage) {
+        this.profileImage = profileImage;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -70,67 +123,59 @@ public class AccountEntity {
         this.email = email;
     }
 
-    public String getLastname() {
-        return lastname;
+    public List<CartEntity> getCartEntities() {
+        return cartEntities;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setCartEntities(List<CartEntity> cartEntities) {
+        this.cartEntities = cartEntities;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getRole() {
+        return role;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public Set<RoleEntity> getRoleEntities() {
-        return roleEntities;
+    public Boolean getEnable() {
+        return enable;
     }
 
-    public void setRoleEntities(Set<RoleEntity> roleEntities) {
-        this.roleEntities = roleEntities;
+    public void setEnable(Boolean enable) {
+        this.enable = enable;
     }
 
-    public List<ReviewEntity> getReviewEntities() {
-        return reviewEntities;
+    public Boolean getAccount_nonlocked() {
+        return account_nonlocked;
     }
 
-    public void setReviewEntities(List<ReviewEntity> reviewEntities) {
-        this.reviewEntities = reviewEntities;
+    public void setAccount_nonlocked(Boolean account_nonlocked) {
+        this.account_nonlocked = account_nonlocked;
     }
 
-    public List<ShippingAddressEntity> getShippingAddressEntities() {
-        return shippingAddressEntities;
+    public int getFailed_attempt() {
+        return failed_attempt;
     }
 
-    public void setShippingAddressEntities(List<ShippingAddressEntity> shippingAddressEntities) {
-        this.shippingAddressEntities = shippingAddressEntities;
+    public void setFailed_attempt(int failed_attempt) {
+        this.failed_attempt = failed_attempt;
     }
 
-    public List<ShoppingCartEntity> getShoppingCartEntities() {
-        return shoppingCartEntities;
+    public Date getLock_time() {
+        return lock_time;
     }
 
-    public void setShoppingCartEntities(List<ShoppingCartEntity> shoppingCartEntities) {
-        this.shoppingCartEntities = shoppingCartEntities;
+    public void setLock_time(Date lock_time) {
+        this.lock_time = lock_time;
     }
 
-    public List<PromotionEntity> getPromotionEntities() {
-        return promotionEntities;
+    public String getResetToken() {
+        return resetToken;
     }
 
-    public void setPromotionEntities(List<PromotionEntity> promotionEntities) {
-        this.promotionEntities = promotionEntities;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
     }
 }

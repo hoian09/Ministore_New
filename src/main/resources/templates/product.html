@@ -1,60 +1,124 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{base::layout(~{::section})}">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{base::layout(~{::section})}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh Mục Sản Phẩm</title>
 </head>
 <body>
 <section>
-    <div class="container-fluid bg-light p-5 mt-5">
+    <!-- Search form -->
+    <div class="container-fluid bg-light p-4 mt-5">
         <div class="row">
-        <div class="col-md-8 offset-md-2">
-        <form>
-            <div class="input-group">
-                <input type="text" class="form-control" name="ch" placeholder="Bạn tìm gì...">
-                <button class="btn btn-outline-success text-dark ms-2 col-md-1" >Search</button>
+            <div class="col-md-6 offset-md-3 mt-3 ">
+                <form action="/products" method="get">
+                    <div class="input-group">
+                    <input type="text" class="form-control" name="keyword" placeholder="Bạn tìm gì...">
+                    <button class="btn btn-outline-success text-dark ms-2" type="submit">Tìm kiếm</button>
+                    </div>
+                </form>
+
             </div>
-        </form>
-        </div>
         </div>
     </div>
-    <div class="container-fluid mt-1">
+    <!-- Filter and Products -->
+    <div class="container-fluid mt-4">
         <div class="row">
-            <div class="col-md-2">
-                <div class="list-group">
-                    <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-                        Tất Cả
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action" th:each="c:${category}" >[[${c.name}]]</a>
-                </div>
-            </div>
-            <div class="col-md-10">
-            <div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-                <div class="card-body">
-                    <p class="fs-3 text-center">Sản phẩm</p>
-                    <div class="row">
-                        <div class="col-md-3 mt-4" th:each="p:${product}">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="discount-badge">[[${p.discount}]]%</div>
-                                    <img th:src="@{/admin/getProductFile/{id}(id=${p.id})}" width="100%" height="200px">
-                                    <p class="fs-5 text-center">[[${p.product_name}]]</p>
-                                    <div class="row text-center">
-                                    <p class="fs-6 fw-bold" >
-                                        [[${p.product_price}]] ₫
-                                    </p>
-                                        <a class="btn btn-primary col-md-6 offset-md-3" href="/view_product">Xem Chi Tiết</a>
-                                    </div>
+            <!-- Filter Section -->
+            <div class="col-md-3 mb-4">
+                <form action="/filter" method="get">
+                <div class="filter-title">Bộ lọc tìm kiếm</div>
+                    <div class="accordion" id="filterAccordion">
+                    <!-- Price Filter -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="priceFilterHeading">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#priceFilter" aria-expanded="true" aria-controls="priceFilter">
+                                Mức giá
+                            </button>
+                        </h2>
+                        <div id="priceFilter" class="accordion-collapse collapse show"
+                             aria-labelledby="priceFilterHeading">
+                            <div class="accordion-body">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="priceRange">
+                                    <label class="form-check-label" for="allPrices">Tất cả</label>
                                 </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="priceRange"  value="under2m">
+                                    <label class="form-check-label" for="under2m">Dưới 2 triệu</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="priceRange"  value="2to4m">
+                                    <label class="form-check-label" for="2to4m">Từ 2 - 4 triệu</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="priceRange"  value="6to8m">
+                                    <label class="form-check-label" for="6to8m">Từ 6 - 8 triệu</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="priceRange"  value="10to30m">
+                                    <label class="form-check-label" for="10to30m">Từ 10 - 30 triệu</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="priceRange"  value="50to90m">
+                                    <label class="form-check-label" for="50to90m">Từ 50 - 90 triệu</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="priceRange"  value="over100m">
+                                    <label class="form-check-label" for="over20m">Trên 100 triệu</label>
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-3">Lọc</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            </form>
+            <!-- Category and Products -->
+            <div class="col-md-9">
+                <div class="col-md-12">
+                    <div class="card shadow-sm p-3 mb-3 bg-body-tertiary rounded">
+                    <div class="d-flex justify-content-around">
+                        <div class="category-card">
+                            <img src="img/dongho/icon.png" width="40" height="40" alt="Tất cả"><br>
+                            <a href="/products" class="category-link mt-2 mb-0">Tất cả</a><br>
+                        </div>
+                    <div class="category-card" th:each="c:${category}">
+                        <img th:src="@{/getCategoryFile/{id}(id=${c.id})}" width="40" height="40"><br>
+                        <a th:href="@{'/products?category_id='+${c.id}}" class="category-link mb-0 mt-2" >[[${c.name}]]</a><br>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
+                        <div class="card-body">
+                            <p class="fs-3 text-center">Sản phẩm</p>
+                            <div class="row">
+                                <div class="col-md-3 mt-4" th:each="p:${products}">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="discount-badge">[[${p.discount}]]%</div>
+                                            <img th:src="@{/getProductFile/{id}(id=${p.id})}" width="100%" height="200px">
+                                            <p class="fs-5 text-center">[[${p.product_name}]]</p>
+                                            <div class="row text-center">
+                                                <p class="fs-6 fw-bold" >
+                                                    [[${p.formattedPrice}]]
+                                                </p>
+                                                <a class="btn btn-primary col-md-6 offset-md-3" th:href="@{'/products/'+ ${p.id}}">Xem Chi Tiết</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        </div>
     </div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 </section>
-    </body>
+</body>
 </html>

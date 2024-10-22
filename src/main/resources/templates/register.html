@@ -15,7 +15,10 @@
             <div class="col-md-7 p-2">
                 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
                     <div class="card-header text-center">
-                        <p class="fs-4 text-center">Register</p>
+                        <p class="fs-4 text-center">Đăng Ký</p>
+                        <div th:if="${msg}" class="alert alert-info">
+                            <p th:text="${msg}"></p>
+                        </div>
                         <th:block th:if="${session.succMsg}">
                             <p class="text-success fw-bold">[[${session.succMsg}]]</p>
                             <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
@@ -31,86 +34,64 @@
                               method="post">
                             <div class="row">
                                 <div class="col">
-                                    <label class="form-label">Full Name</label> <input required
-                                                                                       class="form-control" name="name" type="text">
+                                    <label class="form-label">Tên Đầy Đủ</label>
+                                    <input class="form-control" name="name" type="text" required>
                                 </div>
 
                                 <div class="col">
-                                    <label class="form-label">Mobile Number</label> <input
-                                        required class="form-control" name="mobileNumber"
-                                        type="number">
+                                    <label class="form-label">Số Điện Thoại</label>
+                                    <input class="form-control" name="phone" type="number" required>
                                 </div>
-
                             </div>
-
                             <div class="mb-3">
-                                <label class="form-label">Email</label> <input required
-                                                                               class="form-control" name="email" type="email">
+                                <label class="form-label">Email</label>
+                                <input class="form-control" name="email" type="email" required>
                             </div>
-
-
                             <div class="row">
                                 <div class="col">
-                                    <label class="form-label">Address</label> <input required
-                                                                                     class="form-control" name="address" type="text">
+                                    <label class="form-label">Địa Chỉ</label>
+                                    <input class="form-control" name="address" type="text" required>
                                 </div>
-
                                 <div class="col">
-                                    <label class="form-label">City</label> <input required
-                                                                                  class="form-control" name="city" type="text">
+                                    <label class="form-label">Thành Phố</label>
+                                    <input class="form-control" name="city" type="text" required>
                                 </div>
-
                             </div>
-
                             <div class="row">
                                 <div class="col">
-                                    <label class="form-label">State</label> <input required
-                                                                                   class="form-control" name="state" type="text">
+                                    <label class="form-label">Tỉnh</label>
+                                    <input class="form-control" name="province" type="text" required>
                                 </div>
-
                                 <div class="col">
-                                    <label class="form-label">Pincode</label> <input required
-                                                                                     class="form-control" name="pincode" type="number">
+                                    <label class="form-label">Mã Pin</label>
+                                    <input class="form-control" name="pincode" type="number" required>
                                 </div>
-
                             </div>
-
-
                             <div class="row">
                                 <div class="col">
-                                    <label class="form-label">Password</label> <input required
-                                                                                      class="form-control" name="password" type="password" id="pass">
+                                    <label class="form-label">Mật Khẩu</label>
+                                    <input class="form-control" name="password" type="password" required>
                                 </div>
-
                                 <div class="col">
-                                    <label class="form-label">Confirm Password</label> <input
-                                        required class="form-control" name="confirmpassword"
-                                        type="password">
+                                    <label class="form-label">Xác Nhận Mật Khẩu</label>
+                                    <input class="form-control" name="confirmPassword" type="password" required>
                                 </div>
-
                             </div>
-
-
-
                             <div class="mb-3">
-                                <label class="form-label">Profile Image</label> <input
-                                    class="form-control" name="img" type="file">
+                                <label class="form-label">Hình Ảnh Hồ Sơ</label>
+                                <input class="form-control" name="profile_image" type="file">
                             </div>
-                            <button type="submit"
-                                    class="btn bg-primary text-white col-md-12">Register</button>
+                            <button type="submit" class="btn bg-primary text-white col-md-12">Đăng Ký</button>
                         </form>
                     </div>
 
-                    <div class="card-footer text-center">
-
-                        have an account ? <a href="/login" class="text-decoration-none">Login
-                    </a>
+                    <div class="card-footer text-center">Có tài khoản?
+                        <a href="/login" class="text-decoration-none">Đăng Nhập</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </section>
 </body>
 </html>

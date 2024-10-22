@@ -15,7 +15,6 @@
         <div class="card-header text-center fs-4">Thêm Sản Phẩm</div>
             <div class="card-body">
                 <form action="/admin/insertImagee" method="post" enctype="multipart/form-data">
-
                     <div class="mb-3">
                         <label>Nhập Tên Sản Phẩm</label>
                         <input type="text" name="product_name" class="form-control">
@@ -37,7 +36,22 @@
                     </div>
                     <div class="mb-3">
                         <label>Nhập Giá</label>
-                        <input type="number" name="product_price" class="form-control">
+                        <input type="text" name="price" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Trạng Thái</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" value="true" name="is_active" id="flexRadioDefault1" checked>
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                Hoạt Động
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" value="false" name="is_active" id="flexRadioDefault2">
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                Không Hoạt Động
+                            </label>
+                        </div>
                     </div>
                     <div class="row">
                     <div class="mb-3 col">

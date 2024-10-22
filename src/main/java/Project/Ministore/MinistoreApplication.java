@@ -7,5 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MinistoreApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MinistoreApplication.class, args);
+
 	}
 }

@@ -1,8 +1,10 @@
 package Project.Ministore.Entity;
 
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -12,27 +14,32 @@ public class OrdersEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "date")
+    @Column(name = "order_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    private Date orderDate;
+    @Column(name = "order_id")
+    private String orderId;
+    @Column(name = "price")
+    private Long price;
+    @Column(name = "quantity")
+    private int quantity;
     @Column(name = "status")
     private String status;
-    @Column(name = "total_amount")
-    private Double total_amount;
+    @Column(name = "payment_type")
+    private String payment_type;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_address_id")
+    private OrdersAddressEntity ordersAddressEntity;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "shipping_address_id")
-    private ShippingAddressEntity shippingAddressEntity;
+    @JoinColumn(name = "product_id")
+    private ProductEntity productEntity;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "promotion_id")
-    private PromotionEntity promotionEntity;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "shopping_card_id")
-    private ShoppingCartEntity shoppingCartEntity;
-    @OneToMany(mappedBy = "ordersEntity",cascade = CascadeType.ALL)
-    private List<OrdersDetailEntity> ordersDetailEntities;
-    @OneToMany(mappedBy = "ordersEntity", cascade = CascadeType.ALL)
-    private List<PaymentEntity> paymentEntities;
-
+    @JoinColumn(name = "account_id")
+    private AccountEntity accountEntity;
+    public String getFormattedXPrice() {
+        DecimalFormat df = new DecimalFormat("#,###");
+        return df.format(quantity * price) + " ₫";
+    }
     public int getId() {
         return id;
     }
@@ -41,20 +48,24 @@ public class OrdersEntity {
         this.id = id;
     }
 
-    public ShippingAddressEntity getShippingAddressEntity() {
-        return shippingAddressEntity;
+    public Date getOrderDate() {
+        return orderDate;
     }
 
-    public void setShippingAddressEntity(ShippingAddressEntity shippingAddressEntity) {
-        this.shippingAddressEntity = shippingAddressEntity;
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
     }
 
-    public Date getDate() {
-        return date;
+    public String getOrderId() {
+        return orderId;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public Long getPrice() {
+        return price;
     }
 
     public String getStatus() {
@@ -65,43 +76,49 @@ public class OrdersEntity {
         this.status = status;
     }
 
-    public Double getTotal_amount() {
-        return total_amount;
+    public String getPayment_type() {
+        return payment_type;
     }
 
-    public void setTotal_amount(Double total_amount) {
-        this.total_amount = total_amount;
+    public void setPayment_type(String payment_type) {
+        this.payment_type = payment_type;
     }
 
-    public PromotionEntity getPromotionEntity() {
-        return promotionEntity;
+    public void setPrice(Long price) {
+        this.price = price;
     }
 
-    public void setPromotionEntity(PromotionEntity promotionEntity) {
-        this.promotionEntity = promotionEntity;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public ShoppingCartEntity getShoppingCartEntity() {
-        return shoppingCartEntity;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
-    public void setShoppingCartEntity(ShoppingCartEntity shoppingCartEntity) {
-        this.shoppingCartEntity = shoppingCartEntity;
+    public ProductEntity getProductEntity() {
+        return productEntity;
     }
 
-    public List<OrdersDetailEntity> getOrdersDetailEntities() {
-        return ordersDetailEntities;
+    public void setProductEntity(ProductEntity productEntity) {
+        this.productEntity = productEntity;
     }
 
-    public void setOrdersDetailEntities(List<OrdersDetailEntity> ordersDetailEntities) {
-        this.ordersDetailEntities = ordersDetailEntities;
+    public AccountEntity getAccountEntity() {
+        return accountEntity;
     }
 
-    public List<PaymentEntity> getPaymentEntities() {
-        return paymentEntities;
+    public void setAccountEntity(AccountEntity accountEntity) {
+        this.accountEntity = accountEntity;
     }
 
-    public void setPaymentEntities(List<PaymentEntity> paymentEntities) {
-        this.paymentEntities = paymentEntities;
+    public OrdersAddressEntity getOrdersAddressEntity() {
+        return ordersAddressEntity;
     }
+
+    public void setOrdersAddressEntity(OrdersAddressEntity ordersAddressEntity) {
+        this.ordersAddressEntity = ordersAddressEntity;
+    }
+
 }
+

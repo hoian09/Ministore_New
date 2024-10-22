@@ -10,27 +10,43 @@
     <div class="container card-sh" style="margin-top: 100px">
         <div class="col-md-12 p-5">
             <div class="row">
+
+                <th:block th:if="${session.succMsg}">
+                    <p class="text-success text-center alert alert-success">[[${session.succMsg}]]</p>
+                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                </th:block>
+
+                <th:block th:if="${session.errorMsg}">
+                    <p class="text-danger text-center alert alert-danger">[[${session.errorMsg}]]</p>
+                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                </th:block>
             <div class="col-md-5 text-end">
-                <img src="/img/dongho/product1.jpg" width="330px" height="400px">
+                <img th:src="@{/getProductFile/{id}(id=${product.id})}" width="330px" height="400px">
             </div>
             <div class="col-md-6">
-                <p class="fs-3">Seiko Tsuyosa</p>
+                <p class="fs-3">Tên : [[${product.product_name}]]</p>
                 <p>
-                    <span class="fw-bold">Miêu Tả: </span><br>
-                    Trang bị máy automatic sản xuất in-house cho thời gian tích cót khoảng 41 giờ mạnh mẽ.
+                    <span class="fw-bold">Mô Tả: </span>
+                        [[${product.description}]]
                 </p>
                 <p>
-                    <span class="fw-bold">Chi Tiết: </span><br>
+                    <span class="fw-bold">Chi Tiết: </span><br><br>
                     Trạng thái:
+                    <th:block th:if="${product.stock_quantity>0}">
                     <span class="badge bg-success">Có Sẵn</span>
-                    <span class="badge bg-warning">Hết Hàng</span><br>
-                    Xuất xứ: Trung Quốc<br>
+                    </th:block>
+                    <th:block th:unless="${product.stock_quantity>0}">
+                    <span class="badge text-white bg-warning">Hết Hàng</span>
+                    </th:block>
+                    <p>Xuất xứ : [[${product.origin}]]</p>
+                    <p>Danh Mục : [[${product.categoryEntity.name}]] </p>
+                    <p>
                     Chính sách: Đổi trả trong vòng 7 ngày
-                </p>
+                    </p>
                 <p class="fs-5 fw-bold">
-                    Giá:  120,000 ₫
-                    <span class="fs-6 text-decoration-line-through text-secondary">240,000 ₫</span>
-                    <span class="fs-6 text-success">giảm 50%</span>
+                    Giá:  <span>[[${product.getFormattedPrice()}]]</span>
+                    <span class="fs-6 text-decoration-line-through text-secondary">[[${product.getFormattedDiscountPrice()}]]</span>
+                    <span class="fs-6 text-success">giảm [[${product.discount}]]%</span>
                 </p>
                 <div class="row">
                     <div class="col-md-4 text-success text-center p-2">
@@ -46,8 +62,19 @@
                         <p>Miễn phí vận chuyển</p>
                     </div>
             </div>
-                <a href="login.html" class="btn btn-danger col-md-12">Thêm Giỏ Hàng</a>
-        </div>
+                <th:block th:if="${product.stock_quantity>0}">
+                    <th:block th:if="${user==null}">
+                    <a href="/login" class="btn btn-danger col-md-12">Thêm Giỏ Hàng</a>
+                    </th:block>
+                    <th:block th:unless="${user==null}">
+                        <a th:href="@{'/user/addCart?pid='+${product.id}+'&uid='+${user.id}}"
+                                class="btn btn-danger col-md-12">Add To Cart</a>
+                    </th:block>
+                </th:block>
+                <th:block th:unless="${product.stock_quantity>0}">
+                    <a href="#" class="btn text-white btn-warning col-md-12">Hết Hàng</a>
+                </th:block>
+            </div>
         </div>
     </div>
     </div>
