@@ -93,11 +93,16 @@ public class CartServiceImpl implements CartService {
         if (carts.size() > 0) {
             Long orderPrice = carts.get(carts.size() - 1).getTotal_orderPrice();
             totalPrice = carts.get(carts.size() - 1).getTotal_orderPrice() + 25000;
-//            DecimalFormat df = new DecimalFormat("#,###");
-//            String formattedOrderPrice = df.format(orderPrice) + " ₫";
-//            String formattedTotalOrderPrice = df.format(totalOrderPrice) + " ₫";
         }
 
         return totalPrice;
+    }
+
+    @Override
+    public void clearCart(int accountId) {
+        List<CartEntity> carts = cartRepository.findByAccountEntity_Id(accountId);
+        for (CartEntity cart : carts) {
+            cartRepository.delete(cart);
+        }
     }
 }

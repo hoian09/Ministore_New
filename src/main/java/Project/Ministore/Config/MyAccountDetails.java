@@ -36,7 +36,7 @@ private AccountEntity account;
 
     @Override
     public boolean isAccountNonLocked() {
-        return account.getAccount_nonlocked();
+        return true;
     }
 
     @Override

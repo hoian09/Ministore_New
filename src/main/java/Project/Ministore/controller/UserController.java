@@ -76,14 +76,19 @@ public class UserController {
     public String loadCartPage(Principal p, Model model, HttpSession session) {
         AccountEntity user = getLoggedInUserDetails(p);
         List<CartEntity> carts = cartService.getCartByUser(user.getId());
-        model.addAttribute("carts", carts);
-        Long totalOrderPrice = carts.get(carts.size() - 1).getTotal_orderPrice();
-        DecimalFormat df = new DecimalFormat("#,###");
-        String formattedTotalOrderPrice = df.format(totalOrderPrice) + " ₫";
-        model.addAttribute("totalOrderPrice", formattedTotalOrderPrice);
+        Boolean cartEmpty = carts == null || carts.isEmpty();
+        model.addAttribute("cartEmpty", cartEmpty); // Thêm thông báo giỏ hàng trống
+
+        if (!cartEmpty) {
+            model.addAttribute("carts", carts);
+            Long totalOrderPrice = carts.get(carts.size() - 1).getTotal_orderPrice();
+            DecimalFormat df = new DecimalFormat("#,###");
+            String formattedTotalOrderPrice = df.format(totalOrderPrice) + " ₫";
+            model.addAttribute("totalOrderPrice", formattedTotalOrderPrice);
+
+        }
         return "/user/cart";
     }
-
     public AccountEntity getLoggedInUserDetails(Principal principal) {
         String email = principal.getName();
         AccountEntity account = accountService.getUserByEmail(email);
@@ -138,28 +143,18 @@ public class UserController {
         return "/user/order";
     }
 
-//    @PostMapping("/save-order")
-//    public String saveOrders(@RequestParam String payment_type, @ModelAttribute OrdersAddressEntityDto ordersAddressEntityDto,
-//                             Principal principal) {
-//        AccountEntity user = getLoggedInUserDetails(principal);
-//        ordersService.saveOrder(user.getId(), ordersAddressEntityDto);
-//        if ("COD".equals(payment_type)) {
-//            // Xử lý đơn hàng COD
-//            return "redirect:/user/success"; // Redirect đến trang thành công cho COD
-//        } else if ("ONLINE".equals(payment_type)) {
-//            // Xử lý đơn hàng Online
-//            return "redirect:/user/ordersuccess";
-//        }// Redirect đến trang thành công cho Online
-//        return "redirect:/error";
-//    }
     @PostMapping("/save-order")
     public String saveOrders(@RequestParam String payment_type, @ModelAttribute OrdersAddressEntityDto ordersAddressEntityDto,
-                             Principal principal, HttpServletRequest request) {
+                             Principal principal, HttpServletRequest request, HttpSession session) {
         AccountEntity user = getLoggedInUserDetails(principal);
         ordersService.saveOrder(user.getId(), ordersAddressEntityDto);
 
         // Nếu chọn phương thức COD
         if ("COD".equals(payment_type)) {
+            // Xóa giỏ hàng sau khi đơn hàng được lưu
+            cartService.clearCart(user.getId());
+            // Đặt thông báo thành công trong session
+            session.setAttribute("succMsg", "Thanh toán thành công! Giỏ hàng của bạn đã được xử lý.");
             return "redirect:/user/success";
         }
         // Nếu chọn phương thức thanh toán Online

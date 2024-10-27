@@ -19,6 +19,8 @@ public class ProductEntity {
     private String description;
     @Column(name = "price" )
     private Long price;
+    @Column(name = "import_price")
+    private Long import_price;
     @Column(name = "stock_quantity")
     private int stock_quantity;
     @Column(name = "image",nullable = false)
@@ -40,6 +42,10 @@ public class ProductEntity {
     public String getFormattedPrice() {
         DecimalFormat df = new DecimalFormat("#,###");
         return df.format(price) + " ₫";
+    }
+    public String getFormattedImportPrice(){
+        DecimalFormat df = new DecimalFormat("#,###");
+        return df.format(import_price) + "₫";
     }
     public String getFormattedDiscountPrice() {
         DecimalFormat df = new DecimalFormat("#,###");
@@ -133,4 +139,19 @@ public class ProductEntity {
         this.active = active;
     }
 
+    public Long getImport_price() {
+        return import_price;
+    }
+
+    public void setImport_price(Long import_price) {
+        this.import_price = import_price;
+    }
+
+    public List<CartEntity> getCartEntities() {
+        return cartEntities;
+    }
+
+    public void setCartEntities(List<CartEntity> cartEntities) {
+        this.cartEntities = cartEntities;
+    }
 }
